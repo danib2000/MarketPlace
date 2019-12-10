@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import logo from '../logo.png';
 import './App.css';
 import Web3 from 'web3';
 import MarketPlace from '../abis/MarketPlace.json';
-import LogInPage from './logIn';
+import SignPage from './logIn';
+import LogInPage from './logIn2';
 class App extends Component {
 
   async componentWillMount() {
@@ -56,7 +56,19 @@ class App extends Component {
     }
   }
   render() {
-    return (
+    return(
+
+    //<div></div>
+    <div>
+      <SignPage />
+      <LogInPage /></div>
+    )
+    //return (
+      //<div><logIn/></div>
+      //<div>hello <logIn/></div>
+      
+
+
       // <div>
       //   <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       //     <a
@@ -101,8 +113,7 @@ class App extends Component {
       //     </div>
       //   </div>
       // </div>
-      <div><LogInPage/></div>
-    );
+    //);
   }
 }
 
