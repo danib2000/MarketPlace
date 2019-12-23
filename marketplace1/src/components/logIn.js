@@ -14,7 +14,8 @@ constructor(props)
     loading: false,
     error: null,
     initialTab: null,
-    recoverPasswordSuccess: null, //dasd
+    recoverPasswordSuccess: null,
+    loggedEmail : null, 
   }
 }
 
@@ -31,6 +32,9 @@ onLogin() {
       error: true
     })
   } else {
+    this.setState({
+      loggedEmail: email
+    })
     this.onLoginSuccess('form');
   }
 }
@@ -50,6 +54,9 @@ onRegister() {
       error: true
     })
   } else {
+    this.setState({
+      loggedEmail: email
+    })
     this.onLoginSuccess('form');
   }
 }
@@ -123,17 +130,22 @@ afterTabsChange() {
 closeModal() {
   this.setState({
     showModal: false,
-    error: null
+    error: null,
+    loading: false
   });
 }
+
 render(){
+    let logMessage;
     const loggedIn = this.state.loggedIn
-    ? <div>
-        <p>You are signed in with: {this.state.loggedIn}</p>
+    ? logMessage = <div>
+         <p>You are signed in with: {this.state.loggedEmail}</p>
       </div>
-    : <div>
+    : logMessage =<div>
         <p>You are signed out</p>
     </div>;
+
+
 
   const isLoading = this.state.loading;
 
@@ -145,6 +157,7 @@ render(){
         >
           Login
         </button>
+        {logMessage}
 
         <button
           className="RML-btn"
@@ -152,8 +165,7 @@ render(){
         >
           Register
         </button>
-
-
+        
        <button onClick={() => this.openModal()}>Open Modal</button>
        <ReactModalLogin
         visible={this.state.showModal}
@@ -170,6 +182,7 @@ render(){
           label: "Couldn't sign up, please try again."
         }}
         startLoading={this.startLoading.bind(this)}
+        
         finishLoading={this.finishLoading.bind(this)}
         form={{
             onLogin: this.onLogin.bind(this),
@@ -276,4 +289,3 @@ render(){
   );
 }
 }
-//export default logIn;

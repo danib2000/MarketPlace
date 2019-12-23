@@ -61,7 +61,7 @@ class App extends Component {
     //<div></div>
     <div>
       <SignPage />
-      <LogInPage /></div>
+    </div>
     )
     //return (
       //<div><logIn/></div>
