@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import Web3 from 'web3';
 import MarketPlace from '../abis/MarketPlace.json';
-import SignPage from './logIn';
-import LogInPage from './logIn2';
+import SignPage from './logIn/logIn';
+import Home from './Home';
+import About from './About'
 class App extends Component {
 
   async componentWillMount() {
@@ -41,7 +43,7 @@ class App extends Component {
       console.log(marketplace);
     } else {
       window.alert('Marketplace contract not deployed to detected network.');
-    }
+    } 
   }
 
   constructor(props)
@@ -57,11 +59,28 @@ class App extends Component {
   }
   render() {
     return(
-
-    //<div></div>
-    <div>
-      <SignPage />
-    </div>
+      <Router>
+        <div>
+          <h2>Welcome to React Router Tutorial</h2>
+          <div>
+            <SignPage />
+          </div>
+          <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+          <ul className="navbar-nav mr-auto">
+            <li><Link to={'/'} className="nav-link"> Home </Link></li>
+            {/* <li><Link to={'/contact'} className="nav-link">Contact</Link></li> */}
+            <li><Link to={'/about'} className="nav-link">About</Link></li>
+          </ul>
+          </nav>
+          <hr />
+          <Switch>
+              <Route exact path='/' component={Home} />
+              {/* <Route path='/contact' component={Contact} /> */}
+              <Route path='/about' component={About} />
+          </Switch>
+        </div>
+      </Router>
+    
     )
     //return (
       //<div><logIn/></div>

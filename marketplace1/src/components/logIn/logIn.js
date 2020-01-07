@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
 import ReactModalLogin from "react-modal-login";
-import { facebookConfig, googleConfig } from "../social-config";
-
+import { facebookConfig, googleConfig } from "../../social-config";
+import '../logIn/logIn.css'
 export default class SignPage  extends React.Component{
 
 constructor(props)
@@ -94,6 +93,8 @@ openModal(initialTab) {
 onLoginSuccess(method, response) {
 
   this.closeModal();
+  console.log(method);
+  console.log(response);
   this.setState({
     loggedIn: method,
     loading: false
@@ -148,7 +149,7 @@ render(){
 
 
   const isLoading = this.state.loading;
-
+  console.log(isLoading);
   return (
     <div>
         <button
@@ -157,7 +158,7 @@ render(){
         >
           Login
         </button>
-        {logMessage}
+        
 
         <button
           className="RML-btn"
@@ -166,7 +167,9 @@ render(){
           Register
         </button>
         
+        
        <button onClick={() => this.openModal()}>Open Modal</button>
+       <div className="logMessage">{logMessage}</div>
        <ReactModalLogin
         visible={this.state.showModal}
         onCloseModal={this.closeModal.bind(this)}
@@ -181,9 +184,8 @@ render(){
         registerError={{
           label: "Couldn't sign up, please try again."
         }}
-        startLoading={this.startLoading.bind(this)}
-        
-        finishLoading={this.finishLoading.bind(this)}
+        startLoading={() => {this.startLoading()}}
+        finishLoading={() => {this.finishLoading()}}
         form={{
             onLogin: this.onLogin.bind(this),
             onRegister: this.onRegister.bind(this),
