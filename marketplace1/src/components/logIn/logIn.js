@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactModalLogin from "react-modal-login";
 import { facebookConfig, googleConfig } from "../../social-config";
 import '../logIn/logIn.css'
+import { Button } from 'semantic-ui-react';
 export default class SignPage  extends React.Component{
 
 constructor(props)
@@ -152,7 +153,7 @@ render(){
   console.log(isLoading);
   return (
     <div>
-        <button
+        {/* <button
           className="RML-btn"
           onClick={() => this.openModal('login')}
         >
@@ -160,15 +161,19 @@ render(){
         </button>
         
 
-        <button
+        <Button
           className="RML-btn"
           onClick={() => this.openModal('register')}
+          circular
+
+          color="blue"
+
         >
           Register
-        </button>
+        </Button> */}
         
         
-       <button onClick={() => this.openModal()}>Open Modal</button>
+       <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
        <div className="logMessage">{logMessage}</div>
        <ReactModalLogin
         visible={this.state.showModal}

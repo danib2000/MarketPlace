@@ -8,3 +8,17 @@
     margin-left: auto;
     float: right;
 }
+.ui.button.logInModel{
+    display: block;
+    color: black;
+    position: relative;
+    right: 0;
+    margin-right: 30px;
+}
+.logMessage{
+    display: block;
+    color: white;
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
+}

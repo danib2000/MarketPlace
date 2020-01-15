@@ -61,16 +61,16 @@ class App extends Component {
     return(
       <Router>
         <div>
-          <h2>Welcome to React Router Tutorial</h2>
-          <div>
-            <SignPage />
-          </div>
           <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
           <ul className="navbar-nav mr-auto">
+          
             <li><Link to={'/'} className="nav-link"> Home </Link></li>
             {/* <li><Link to={'/contact'} className="nav-link">Contact</Link></li> */}
             <li><Link to={'/about'} className="nav-link">About</Link></li>
           </ul>
+          <div>
+            <SignPage />
+          </div>
           </nav>
           <hr />
           <Switch>
