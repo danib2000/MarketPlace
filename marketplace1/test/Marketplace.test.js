@@ -1,7 +1,7 @@
-import { Contract } from "web3-eth-contract";
-import { Accounts } from "web3-eth-accounts";
-import { isTopic } from "web3-utils";
-import { mkdir } from "fs";
+// import { Contract } from "web3-eth-contract";
+// import { Accounts } from "web3-eth-accounts";
+// import { isTopic } from "web3-utils";
+// import { mkdir } from "fs";
 
 const Marketplace = artifacts.require('./MarketPlace.sol')
 require('chai')
