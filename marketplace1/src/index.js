@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'mobx-react';
-import store from "./MarketStore";
+import store from "./stores/MarketStore";
 
 
 ReactDOM.render(
