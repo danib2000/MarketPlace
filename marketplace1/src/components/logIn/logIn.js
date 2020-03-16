@@ -100,6 +100,7 @@ onLoginSuccess(method, response) {
     loggedIn: method,
     loading: false
   })
+  
 }
 
 onLoginFail(method, response) {
@@ -173,7 +174,10 @@ render(){
         </Button> */}
         
         
+        {/* {(!this.currentUserStore.isUserLoggedin) && (
        <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
+        )} */}
+        <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
        <div className="logMessage">{logMessage}</div>
        <ReactModalLogin
         visible={this.state.showModal}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar'
+import store from '../MarketStore';
 
 class CreateProduct extends Component {
     constructor(props)
@@ -17,7 +18,7 @@ class CreateProduct extends Component {
                 event.preventDefault()
                 const name = this.productName.value
                 const price = window.web3.utils.toWei(this.productPrice.value.toString(), 'Ether')
-                this.props.createProduct(name, price)
+                store.createp(name, price)
               }}>
                 <div className="form-group mr-sm-2">
                   <input

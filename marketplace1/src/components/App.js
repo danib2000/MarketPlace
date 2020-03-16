@@ -6,13 +6,17 @@ import MarketPlace from '../abis/MarketPlace.json';
 import Navbar from './Navbar';
 import Home from './Home';
 import About from './About'
+import store from '../MarketStore';
 
 class App extends Component {
 
   async componentWillMount() {
+    
     try{ 
-    await this.loadWeb3()
-    await this.loadBlockchainData()
+    //await this.loadWeb3()
+    //await this.loadBlockchainData()
+    store.loadWeb3();
+    store.loadBlockchainData();
     }
     catch{
       window.alert('Non-Ethereum browser detected, you wont be able to purchase items. You should consider trying MetaMask!')
@@ -57,20 +61,13 @@ class App extends Component {
       products: [],
       loading: true
     }
-    this.createProduct= this.createProduct.bind(this)
   }
-  createProduct(name,price){
-    this.setState({loading: true})
-    this.state.marketplace.methods.createProduct(name, price).send({from:this.state.account})
-    .once('receipt', (receipt)=> {
-        this.setState({loading:false})
-    })
-}
+
   render() {
     return(
       <Router>
       <div>
-           <Navbar createProduct={this.createProduct}/>
+           <Navbar/>
         <Switch>
           <Route exact path='/' component={Home} /> 
           {/* <Route path='/contact' component={Contact} /> */}
