@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar'
-import store from '../MarketStore';
+import store from '../stores/MarketStore';
 
 class CreateProduct extends Component {
     constructor(props)

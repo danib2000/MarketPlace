@@ -6,7 +6,6 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'mobx-react';
 import store from "./stores/MarketStore";
 
-
 ReactDOM.render(
     <Provider store ={store}>
     <App></App>

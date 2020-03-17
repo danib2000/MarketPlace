@@ -6,7 +6,7 @@ import MarketPlace from '../abis/MarketPlace.json';
 import Navbar from './Navbar';
 import Home from './Home';
 import About from './About'
-import store from '../MarketStore';
+import store from '../stores/MarketStore';
 
 class App extends Component {
 

@@ -1,6 +1,6 @@
 import {observable, action} from 'mobx';
 import Web3 from 'web3';
-import MarketPlace from './abis/MarketPlace.json';
+import MarketPlace from '../abis/MarketPlace.json'
 
 class MarketStore{
     @observable products =[];

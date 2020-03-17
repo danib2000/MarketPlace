@@ -5,25 +5,17 @@
   "author": "danib564@gmail.com",
   "dependencies": {
     "@babel/core": "7.1.6",
-<<<<<<< HEAD
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-syntax-decorators": "^7.8.3",
     "@svgr/webpack": "2.4.1",
     "@types/react": "^16.9.16",
     "axios": "^0.19.2",
-=======
-    "@svgr/webpack": "2.4.1",
-    "@types/react": "^16.9.16",
->>>>>>> login
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
     "babel-loader": "8.0.4",
     "babel-plugin-named-asset-import": "^0.3.0",
-<<<<<<< HEAD
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
-=======
->>>>>>> login
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-es2015": "6.24.1",
@@ -57,21 +49,15 @@
     "jest-pnp-resolver": "1.0.1",
     "jest-resolve": "23.6.0",
     "mini-css-extract-plugin": "0.4.3",
-<<<<<<< HEAD
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
-=======
->>>>>>> login
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.3.1",
     "postcss-safe-parser": "4.0.1",
-<<<<<<< HEAD
     "prettier": "^1.19.1",
-=======
->>>>>>> login
     "react": "16.8.4",
     "react-app-polyfill": "^0.2.0",
     "react-bootstrap": "1.0.0-beta.5",
@@ -88,11 +74,7 @@
     "typescript": "^3.7.3",
     "url-loader": "1.1.1",
     "web3": "1.0.0-beta.55",
-<<<<<<< HEAD
     "webpack": "^4.42.0",
-=======
-    "webpack": "4.19.1",
->>>>>>> login
     "webpack-dev-server": "3.1.14",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3",
@@ -112,14 +94,11 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-<<<<<<< HEAD
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-syntax-decorators": "^7.8.3",
     "babel-plugin-transform-decorators-legacy": "^1.3.5"
   },
-=======
->>>>>>> login
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
@@ -164,7 +143,6 @@
   "babel": {
     "presets": [
       "react-app"
-<<<<<<< HEAD
     ],
     "plugins": [
       [
@@ -173,8 +151,6 @@
           "legacy": true
         }
       ]
-=======
->>>>>>> login
     ]
   }
 }
