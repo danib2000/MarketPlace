@@ -7,7 +7,7 @@ class BaseFetcher{
         return await axios.get(baseUrl + url);
     }
     static async httpPost(url , body){
-        return await axios.post(this.baseUrl, body)
+        return await axios.post(this.baseUrl + url, body)
     }
 
 }
