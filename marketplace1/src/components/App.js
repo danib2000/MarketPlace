@@ -1,55 +1,42 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
-import Web3 from 'web3';
-import MarketPlace from '../abis/MarketPlace.json';
 import Navbar from './Navbar';
 import Home from './Home';
 import About from './About'
-import store from '../stores/MarketStore';
+import LocalStorage from '../localStorage/localStorageUtil';
+import rootStores from '../stores';
+import {CURRENT_USER_STORE, MARKET_STORE} from '../stores/storeKeys';
+import { observer } from 'mobx-react';
 
+
+const currentUserStore = rootStores[CURRENT_USER_STORE];
+@observer
 class App extends Component {
 
-  async componentWillMount() {
-    
+   componentDidMount() {
+     LocalStorage.getTokenFromLocalStorage().then( (token) =>{
+      if(token){
+        //currentUserStore.initUserFromAPI();
+        currentUserStore.initUserFromAPI();
+        console.log(currentUserStore);
+      }
+    }).catch((err) => {
+      console.log(err.message);
+    });
+
     try{ 
     //await this.loadWeb3()
     //await this.loadBlockchainData()
-    store.loadWeb3();
-    store.loadBlockchainData();
+    // store.loadWeb3();
+    // store.loadBlockchainData();
+    rootStores[MARKET_STORE].loadWeb3();
+    rootStores[MARKET_STORE].loadBlockchainData();
     }
     catch{
       window.alert('Non-Ethereum browser detected, you wont be able to purchase items. You should consider trying MetaMask!')
     }
-  }    
-  async loadWeb3() {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum)
-      await window.ethereum.enable()
-    }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-  }
-  async loadBlockchainData() {
-    const web3 = window.web3
-    const accounts = await web3.eth.getAccounts();
-    //console.log(accounts);
-    this.setState({ account: accounts[0] });
-    const networkId = await web3.eth.net.getId();
-    console.log(networkId);
-    console.log(MarketPlace.abi)
-
-    const networkData = MarketPlace.networks[networkId];
-    if(networkData) { //need to connect metamast to ganache on 127.0.0.1:7545
-      const marketplace = web3.eth.Contract(MarketPlace.abi, networkData.address);
-      //window.alert('qwe');
-      this.setState({loading:false})
-      this.setState({ marketplace})
-    } else {
-      window.alert('Marketplace contract not deployed to detected network.');
-    } 
-  }
+  } 
 
   constructor(props)
   {

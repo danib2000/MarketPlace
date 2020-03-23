@@ -4,10 +4,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'mobx-react';
+import rootStores from './stores';
 import store from "./stores/MarketStore";
-
+import authStore from "./stores/AuthStore";
+import currentUserStore from "./stores/CurrentUserStore";
 ReactDOM.render(
-    <Provider store ={store}>
+    // <Provider store = {store} AuthStore = {authStore} CurrentUserStore = {currentUserStore}>
+    <Provider {...rootStores}>
     <App></App>
     </Provider>
             , document.getElementById('root'));

@@ -3,7 +3,15 @@ import ReactModalLogin from "react-modal-login";
 import { facebookConfig, googleConfig } from "../../social-config";
 import '../logIn/logIn.css'
 import { Button } from 'semantic-ui-react';
-export default class SignPage  extends React.Component{
+import rootStores from '../../stores';
+import {AUTH_STORE, CURRENT_USER_STORE} from '../../stores/storeKeys';
+import { observer } from 'mobx-react';
+import userFetcher from '../../fetchers/userFetcher';
+
+const authStore = rootStores[AUTH_STORE];
+const currentUserStore = rootStores[CURRENT_USER_STORE];
+@observer
+class SignPage  extends React.Component{
 
 constructor(props)
 {
@@ -15,25 +23,27 @@ constructor(props)
     error: null,
     initialTab: null,
     recoverPasswordSuccess: null,
-    loggedEmail : null, 
+    loggeduserName : null, 
   }
 }
 
 onLogin() {
   console.log('__onLogin__');
-  console.log('email: ' + document.querySelector('#email').value);
+  console.log('userName: ' + document.querySelector('#userName').value);
   console.log('password: ' + document.querySelector('#password').value);
 
-  const email = document.querySelector('#email').value;
+  const userName = document.querySelector('#userName').value;
   const password = document.querySelector('#password').value;
+  authStore.authenticationLogIn(userName, password);
+  //authStore.authenticationLogIn(userName, password);
 
-  if (!email || !password) {
+  if (!userName || !password) {
     this.setState({
       error: true
     })
   } else {
     this.setState({
-      loggedEmail: email
+      loggeduserName: userName
     })
     this.onLoginSuccess('form');
   }
@@ -42,33 +52,35 @@ onLogin() {
 onRegister() {
   console.log('__onRegister__');
   console.log('login: ' + document.querySelector('#login').value);
-  console.log('email: ' + document.querySelector('#email').value);
+  console.log('userName: ' + document.querySelector('#userName').value);
   console.log('password: ' + document.querySelector('#password').value);
 
   const login = document.querySelector('#login').value;
-  const email = document.querySelector('#email').value;
+  const userName = document.querySelector('#userName').value;
   const password = document.querySelector('#password').value;
 
-  if (!login || !email || !password) {
+  if (!login || !userName || !password) {
     this.setState({
       error: true
     })
   } else {
     this.setState({
-      loggedEmail: email
+      loggeduserName: userName
     })
+    userFetcher.postCustomer(userName, password, login, 'user');
+    authStore.authenticationLogIn(userName, password);
     this.onLoginSuccess('form');
   }
 }
 
 onRecoverPassword() {
   console.log('__onFotgottenPassword__');
-  console.log('email: ' + document.querySelector('#email').value);
+  console.log('userName: ' + document.querySelector('#userName').value);
 
-  const email = document.querySelector('#email').value;
+  const userName = document.querySelector('#userName').value;
 
 
-  if (!email) {
+  if (!userName) {
     this.setState({
       error: true,
       recoverPasswordSuccess: false
@@ -142,42 +154,20 @@ render(){
     let logMessage;
     const loggedIn = this.state.loggedIn
     ? logMessage = <div>
-         <p>You are signed in with: {this.state.loggedEmail}</p>
+         <p>You are signed in with: {this.state.loggeduserName}</p>
       </div>
     : logMessage =<div>
         <p>You are signed out</p>
     </div>;
-
-
-
   const isLoading = this.state.loading;
-  console.log(isLoading);
   return (
     <div>
-        {/* <button
-          className="RML-btn"
-          onClick={() => this.openModal('login')}
-        >
-          Login
-        </button>
-        
-
-        <Button
-          className="RML-btn"
-          onClick={() => this.openModal('register')}
-          circular
-
-          color="blue"
-
-        >
-          Register
-        </Button> */}
-        
-        
-        {/* {(!this.currentUserStore.isUserLoggedin) && (
-       <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
-        )} */}
+        {(!currentUserStore.isUserLoggedIn) ?
         <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
+        :
+        (<Button class="bla">test</Button>)
+        }
+
        <div className="logMessage">{logMessage}</div>
        <ReactModalLogin
         visible={this.state.showModal}
@@ -220,12 +210,12 @@ render(){
             loginInputs: [
               {
                 containerClass: 'RML-form-group',
-                label: 'Email',
-                type: 'email',
+                label: 'user name',
+                type: 'userName',
                 inputClass: 'RML-form-control',
-                id: 'email',
-                name: 'email',
-                placeholder: 'Email',
+                id: 'userName',
+                name: 'userName',
+                placeholder: 'user name',
               },
               {
                 containerClass: 'RML-form-group',
@@ -240,21 +230,21 @@ render(){
             registerInputs: [
               {
                 containerClass: 'RML-form-group',
-                label: 'Nickname',
+                label: 'email',
                 type: 'text',
                 inputClass: 'RML-form-control',
                 id: 'login',
                 name: 'login',
-                placeholder: 'Nickname',
+                placeholder: 'email',
               },
               {
                 containerClass: 'RML-form-group',
-                label: 'Email',
-                type: 'email',
+                label: 'user name',
+                type: 'userName',
                 inputClass: 'RML-form-control',
-                id: 'email',
-                name: 'email',
-                placeholder: 'Email',
+                id: 'userName',
+                name: 'userName',
+                placeholder: 'user name',
               },
               {
                 containerClass: 'RML-form-group',
@@ -269,12 +259,12 @@ render(){
             recoverPasswordInputs: [
               {
                 containerClass: 'RML-form-group',
-                label: 'Email',
-                type: 'email',
+                label: 'user name',
+                type: 'userName',
                 inputClass: 'RML-form-control',
-                id: 'email',
-                name: 'email',
-                placeholder: 'Email',
+                id: 'userName',
+                name: 'userName',
+                placeholder: 'user name',
               },
             ],
           }}
@@ -300,3 +290,4 @@ render(){
   );
 }
 }
+export default SignPage;

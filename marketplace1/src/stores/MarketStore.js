@@ -9,11 +9,11 @@ class MarketStore{
 
     @action
     createp = (name , price) => {
-        this.loadWeb3();
-        this.loadBlockchainData();
+        // this.loadWeb3();
+        // this.loadBlockchainData();
         this.marketplace.methods.createProducts(name, price).send({from:this.account})
         .once('receipt', (receipt)=> {
-        console.log('yay');
+        console.log(receipt);
     })
     }
     @action
@@ -36,7 +36,6 @@ class MarketStore{
                 const networkData = MarketPlace.networks[networkId];
         
                 if(networkData) { //need to connect metamast to ganache on 127.0.0.1:7545
-                
                     const marketPlace = web3.eth.Contract(MarketPlace.abi, networkData.address);
                     console.log(marketPlace);
                     this.marketplace = marketPlace;
@@ -49,6 +48,6 @@ class MarketStore{
     }
 }
 
-var store = window.stores = new MarketStore;
+//var store = window.stores = new MarketStore;
 
-export default store;
+export default MarketStore;
