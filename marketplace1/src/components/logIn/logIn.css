@@ -22,3 +22,11 @@
     right: 0;
     margin-right: 20px;
 }
+.ui.dropdown {
+    right: 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+.ui.dropdown .menu{
+    margin: 15px;
+    padding: 5px;
+}

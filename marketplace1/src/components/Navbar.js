@@ -25,8 +25,6 @@ class Navbar extends Component {
                 <div><SignPage  /></div>
             </nav>
         </div>
-        
-        
     );
   }
 }

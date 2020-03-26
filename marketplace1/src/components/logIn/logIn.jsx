@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactModalLogin from "react-modal-login";
 import { facebookConfig, googleConfig } from "../../social-config";
 import '../logIn/logIn.css'
@@ -7,7 +7,7 @@ import rootStores from '../../stores';
 import {AUTH_STORE, CURRENT_USER_STORE} from '../../stores/storeKeys';
 import { observer } from 'mobx-react';
 import userFetcher from '../../fetchers/userFetcher';
-
+import ProfileDropDown from './profileDropdown.jsx';
 const authStore = rootStores[AUTH_STORE];
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 @observer
@@ -34,14 +34,13 @@ onLogin() {
 
   const userName = document.querySelector('#userName').value;
   const password = document.querySelector('#password').value;
-  authStore.authenticationLogIn(userName, password);
-  //authStore.authenticationLogIn(userName, password);
-
+  
   if (!userName || !password) {
     this.setState({
       error: true
     })
   } else {
+    authStore.authenticationLogIn(userName, password);
     this.setState({
       loggeduserName: userName
     })
@@ -151,24 +150,14 @@ closeModal() {
 }
 
 render(){
-    let logMessage;
-    const loggedIn = this.state.loggedIn
-    ? logMessage = <div>
-         <p>You are signed in with: {this.state.loggeduserName}</p>
-      </div>
-    : logMessage =<div>
-        <p>You are signed out</p>
-    </div>;
   const isLoading = this.state.loading;
   return (
     <div>
-        {(!currentUserStore.isUserLoggedIn) ?
+        {(currentUserStore.isUserLoggedIn) ?
         <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
         :
-        (<Button class="bla">test</Button>)
+        (<ProfileDropDown/>)
         }
-
-       <div className="logMessage">{logMessage}</div>
        <ReactModalLogin
         visible={this.state.showModal}
         onCloseModal={this.closeModal.bind(this)}

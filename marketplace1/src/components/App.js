@@ -59,6 +59,7 @@ class App extends Component {
           <Route exact path='/' component={Home} /> 
           {/* <Route path='/contact' component={Contact} /> */}
            <Route path='/about' component={About} />
+           <Route path='/profile' component={}/>
       </Switch>
       </div>
   </Router>
