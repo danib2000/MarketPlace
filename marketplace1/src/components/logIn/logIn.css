@@ -22,6 +22,10 @@
     right: 0;
     margin-right: 20px;
 }
+.RML-login-modal-error{
+    text-align: center;
+    font-size: 16px;
+}
 .ui.dropdown {
     right: 20px;
     color: rgba(255, 255, 255, 0.5);

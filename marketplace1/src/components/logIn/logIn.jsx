@@ -10,6 +10,7 @@ import userFetcher from '../../fetchers/userFetcher';
 import ProfileDropDown from './profileDropdown.jsx';
 const authStore = rootStores[AUTH_STORE];
 const currentUserStore = rootStores[CURRENT_USER_STORE];
+
 @observer
 class SignPage  extends React.Component{
 
@@ -23,52 +24,64 @@ constructor(props)
     error: null,
     initialTab: null,
     recoverPasswordSuccess: null,
-    loggeduserName : null, 
+    loggeduserName : null,
+    errorMessage: "" 
   }
 }
 
-onLogin() {
-  console.log('__onLogin__');
-  console.log('userName: ' + document.querySelector('#userName').value);
-  console.log('password: ' + document.querySelector('#password').value);
 
+onLogin() {
   const userName = document.querySelector('#userName').value;
   const password = document.querySelector('#password').value;
   
   if (!userName || !password) {
     this.setState({
+      errorMessage:"Username or password are missing",
       error: true
     })
   } else {
-    authStore.authenticationLogIn(userName, password);
-    this.setState({
-      loggeduserName: userName
-    })
-    this.onLoginSuccess('form');
+      this.startLoading();
+         authStore.authenticationLogIn(userName, password).then(() => {
+           this.finishLoading();
+          if(currentUserStore.errorMessage){
+            this.setState({
+              errorMessage:"Authentication failed - Username or password are incorrect",
+              error:true
+            });
+          }else{
+            this.onLoginSuccess('form');
+          }
+        });
+    
   }
 }
 
 onRegister() {
-  console.log('__onRegister__');
-  console.log('login: ' + document.querySelector('#login').value);
-  console.log('userName: ' + document.querySelector('#userName').value);
-  console.log('password: ' + document.querySelector('#password').value);
-
   const login = document.querySelector('#login').value;
   const userName = document.querySelector('#userName').value;
   const password = document.querySelector('#password').value;
 
   if (!login || !userName || !password) {
     this.setState({
+      errorMessage: "Please fill all of the fields",
       error: true
     })
   } else {
-    this.setState({
-      loggeduserName: userName
-    })
-    userFetcher.postCustomer(userName, password, login, 'user');
-    authStore.authenticationLogIn(userName, password);
-    this.onLoginSuccess('form');
+    try{
+      this.startLoading();
+      userFetcher.postCustomer(userName, password, login, 'user').then(()=>{
+        authStore.authenticationLogIn(userName, password);
+        this.finishLoading();
+        this.onLoginSuccess('form');
+      }).catch(err =>{
+        this.setState({
+          errorMessage:"Duplicate Username - This username has already been taken, please enter a different username",
+          error:true
+        });
+      });
+    }catch(err){
+      alert(err);
+    }
   }
 }
 
@@ -82,7 +95,8 @@ onRecoverPassword() {
   if (!userName) {
     this.setState({
       error: true,
-      recoverPasswordSuccess: false
+      recoverPasswordSuccess: false,
+      errorMessage: "Please enter your Username"
     })
   } else {
     this.setState({
@@ -105,8 +119,7 @@ openModal(initialTab) {
 onLoginSuccess(method, response) {
 
   this.closeModal();
-  console.log(method);
-  console.log(response);
+  currentUserStore.errorMessage=null;
   this.setState({
     loggedIn: method,
     loading: false
@@ -153,7 +166,7 @@ render(){
   const isLoading = this.state.loading;
   return (
     <div>
-        {(currentUserStore.isUserLoggedIn) ?
+        {(!currentUserStore.isUserLoggedIn) ?
         <Button className="logInModel" onClick={() => this.openModal()} >Sign In/ Sign Up</Button>
         :
         (<ProfileDropDown/>)
@@ -167,10 +180,10 @@ render(){
           afterChange: this.afterTabsChange.bind(this)
         }}
         loginError={{
-          label: "Couldn't sign in, please try again."
+          label: this.state.errorMessage
         }}
         registerError={{
-          label: "Couldn't sign up, please try again."
+          label: this.state.errorMessage
         }}
         startLoading={() => {this.startLoading()}}
         finishLoading={() => {this.finishLoading()}}
@@ -199,12 +212,12 @@ render(){
             loginInputs: [
               {
                 containerClass: 'RML-form-group',
-                label: 'user name',
+                label: 'Username',
                 type: 'userName',
                 inputClass: 'RML-form-control',
                 id: 'userName',
                 name: 'userName',
-                placeholder: 'user name',
+                placeholder: 'Username',
               },
               {
                 containerClass: 'RML-form-group',
@@ -219,25 +232,25 @@ render(){
             registerInputs: [
               {
                 containerClass: 'RML-form-group',
-                label: 'email',
+                label: 'Email *',
                 type: 'text',
                 inputClass: 'RML-form-control',
                 id: 'login',
                 name: 'login',
-                placeholder: 'email',
+                placeholder: 'Email',
               },
               {
                 containerClass: 'RML-form-group',
-                label: 'user name',
+                label: 'Username *',
                 type: 'userName',
                 inputClass: 'RML-form-control',
                 id: 'userName',
                 name: 'userName',
-                placeholder: 'user name',
+                placeholder: 'Username',
               },
               {
                 containerClass: 'RML-form-group',
-                label: 'Password',
+                label: 'Password *',
                 type: 'password',
                 inputClass: 'RML-form-control',
                 id: 'password',
@@ -248,12 +261,12 @@ render(){
             recoverPasswordInputs: [
               {
                 containerClass: 'RML-form-group',
-                label: 'user name',
+                label: 'Username',
                 type: 'userName',
                 inputClass: 'RML-form-control',
                 id: 'userName',
                 name: 'userName',
-                placeholder: 'user name',
+                placeholder: 'Username',
               },
             ],
           }}

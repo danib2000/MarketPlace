@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import Navbar from './Navbar'
 import store from '../stores/MarketStore';
 
 class CreateProduct extends Component {
-    constructor(props)
-    {
-      super(props);
-      //this.createProduct = this.props.createProduct.bind(this)
-    }
-    
-
+   
   render() {
     return (
             <div id="content" style={{marginTop :"40px"}}>

@@ -27,6 +27,10 @@ class LocalStorage{
         }
     }
 
+    static clearTokenFromLocalStorage(){
+        localStorage.removeItem(this.fields.token);
+    };
+
     //write local storage
     static writeToLocalStorage(token){
         try {
