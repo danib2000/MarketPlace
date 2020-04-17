@@ -8,6 +8,7 @@ import {AUTH_STORE, CURRENT_USER_STORE} from '../../stores/storeKeys';
 import { observer } from 'mobx-react';
 import userFetcher from '../../fetchers/userFetcher';
 import ProfileDropDown from './profileDropdown.jsx';
+import AlertUtils from '../../AlertUtils';
 const authStore = rootStores[AUTH_STORE];
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 
@@ -30,7 +31,7 @@ constructor(props)
 }
 
 
-onLogin() {
+async onLogin() {
   const userName = document.querySelector('#userName').value;
   const password = document.querySelector('#password').value;
   
@@ -41,9 +42,10 @@ onLogin() {
     })
   } else {
       this.startLoading();
-         authStore.authenticationLogIn(userName, password).then(() => {
+        
+         await authStore.authenticationLogIn(userName, password).then(async () => {
            this.finishLoading();
-          if(currentUserStore.errorMessage){
+          if(currentUserStore.errorMessage && !currentUserStore.isUserLoggedIn){
             this.setState({
               errorMessage:"Authentication failed - Username or password are incorrect",
               error:true
@@ -107,6 +109,7 @@ onRecoverPassword() {
 }
 
 openModal(initialTab) {
+
   this.setState({
     initialTab: initialTab
   }, () => {
@@ -117,9 +120,9 @@ openModal(initialTab) {
 }
 
 onLoginSuccess(method, response) {
-
   this.closeModal();
   currentUserStore.errorMessage=null;
+  //AlertUtils.showLogInpopUp();
   this.setState({
     loggedIn: method,
     loading: false

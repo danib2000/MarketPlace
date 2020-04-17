@@ -4,6 +4,7 @@ import {CURRENT_USER_STORE} from '../../stores/storeKeys';
 import rootStores from '../../stores';
 import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import NotificationDropDown from './notificationDropdown';
 
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 @observer
@@ -34,7 +35,12 @@ class ProfileDropDown extends Component{
       this.props.history.replace('/');
     }
       render(){
-        return <Dropdown trigger={this.trigger} options={this.profileOptions} style={{}}/> 
+
+        return (<div>
+          <NotificationDropDown />
+          <Dropdown trigger={this.trigger} options={this.profileOptions} style={{}}/>
+          </div>
+         )
       }
  
 }

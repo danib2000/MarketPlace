@@ -1,13 +1,15 @@
 import AuthStore from './AuthStore';
 import CurrentUserStore from './CurrentUserStore';
 import MarketStore from './MarketStore';
-import {AUTH_STORE, CURRENT_USER_STORE, MARKET_STORE } from './storeKeys';
+import NotificationStore from './NotificationStore';
+import {AUTH_STORE, CURRENT_USER_STORE, MARKET_STORE, NOTIFICATION_STORE} from './storeKeys';
 
 
 /**
  * Initiate all stores
  */
-const currentUserStore = new CurrentUserStore();
+const notificationStore = new NotificationStore();
+const currentUserStore = new CurrentUserStore(notificationStore);
 const authStore = new AuthStore();
 authStore.initStore(currentUserStore);
 //currentUserStore.checkIfToken();
@@ -20,6 +22,7 @@ const rootStores = {
 	[CURRENT_USER_STORE]: currentUserStore,
 	[AUTH_STORE]: authStore,
 	[MARKET_STORE]: marketStore,
+	[NOTIFICATION_STORE]:notificationStore, 
 };
 
 export default rootStores;

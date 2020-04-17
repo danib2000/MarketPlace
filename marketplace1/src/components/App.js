@@ -48,12 +48,10 @@ class App extends Component {
       window.alert('Non-Ethereum browser detected, you wont be able to purchase items. You should consider trying MetaMask!')
     }
     this.setState({loading:false})
-    console.log(this.state);
   } 
 
  
   render() {
-    console.log(this.state.loading);
     if(this.state.loading){
       return(<div></div>)
     }else 

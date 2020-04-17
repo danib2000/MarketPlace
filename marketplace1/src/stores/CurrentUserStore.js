@@ -4,17 +4,19 @@ import User from '../modules/User';
 import LocalStorage from '../localStorage/localStorageUtil'
 class CurrentUserStore{
     @observable currentUser;
+    notificationStore;
 
-    constructor(){
+    constructor(notificationStore){
         this.currentUser = null;
         this.errorMessage = null;
+        this.notificationStore = notificationStore;
     }
 
     @action 
     async initUserFromAPI(){
+        this.errorMessage = null;
         const authData = await UserFetcher.getUserFromApi();
         const newUser = new User();
-        console.log(authData);
         newUser.id = authData.id;
         newUser.email = authData.email;
         newUser.userName = authData.userName;
@@ -28,7 +30,11 @@ class CurrentUserStore{
         newUser.walletAddress = authData.walletAddress;
         newUser.infoAboutUser = authData.about;
         newUser.country = authData.country;
+        newUser.notification = authData.notification;
         this.currentUser = newUser;
+        if(this.currentUser.notification>0){
+          await this.notificationStore.getAllNotifications();
+        }
     }
     @action 
     async checkIfToken(){

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Tab } from 'semantic-ui-react'
+import {  Tab } from 'semantic-ui-react'
 import {CURRENT_USER_STORE} from '../../../stores/storeKeys';
 import rootStores from '../../../stores';
 import UserFrom from './userForm';
@@ -34,7 +34,7 @@ class Profile extends Component {
     }
   }
   render() {
-    const { value } = this.state;
+    // const { value } = this.state;
     if(currentUserStore.currentUser){
       this.addPane();
     }

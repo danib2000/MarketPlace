@@ -14,6 +14,7 @@ class User{
     infoAboutUser;
     firstName;
     lastName;
+    notification;
     
     setSellerInfo(address, city, region, secondaddress, secondcity, secondregion, walletAddress, about){
         this.address = address;

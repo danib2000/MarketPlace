@@ -8,12 +8,17 @@ class UserFetcher extends baseFetcher{
     static async getUserFromApi(){
         return await (await this.httpget(this.routerBaseUrl + '/getCustomer')).data;
     }
+    static async getAllNotifications(){
+        return await await this.httpget(this.routerBaseUrl+ '/getNotification');
+    }
+     
     static async authenticationLogIn(userName, password){
         return await await this.httpPost(this.routerBaseUrl + '/authenticate', {userName:userName , password:password});
     }
     static async postCustomer(userName, password, email, role){
         return await this.httpPost(this.routerBaseUrl + '/create', {userName:userName , password:password, email:email, role:role});
     }
+    
     static async postSeller( userName, newRole, address, city, region, secondAddress, secondCity, secondRegion, walletAddress, infoAboutUser, country){
         return await this.httpPost(this.routerBaseUrl + '/update', {
             userName      :userName,
@@ -28,6 +33,9 @@ class UserFetcher extends baseFetcher{
             infoAboutUser : infoAboutUser,
             country       : country,
             isSeller      : true});
+    }
+    static async postNotification(info, type, notifyAdmin, userToNotify){
+        return await this.httpPost(this.routerBaseUrl + '/newNotification', {info:info, type:type, notifyAdmin:notifyAdmin, userToNotify:userToNotify});
     }
 }
 export default UserFetcher;

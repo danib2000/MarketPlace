@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, TextArea, Button, Select } from 'semantic-ui-react'
-import {CURRENT_USER_STORE} from '../../../stores/storeKeys';
+import {CURRENT_USER_STORE, NOTIFICATION_STORE} from '../../../stores/storeKeys';
 import rootStores from '../../../stores';
 import userFetcher from '../../../fetchers/userFetcher';
 import AlertUtils from '../../../AlertUtils';
@@ -15,7 +15,7 @@ const options = [
 ]
 
 const currentUserStore = rootStores[CURRENT_USER_STORE];
-
+const notificationStore = rootStores[NOTIFICATION_STORE];
 class SellerForm extends Component{
     state = {
         address: "",
@@ -28,7 +28,8 @@ class SellerForm extends Component{
         about: "",
         termsChecked:false,
         walletAddress: "",
-        firstSubmite: true
+        firstSubmit: true,
+        createNotification: true
     };
     
     handleChange = (e, { value }) => this.setState({ value })
@@ -42,14 +43,14 @@ class SellerForm extends Component{
         }
     }
     handleSubmit = () =>{
-        if(this.state.firstSubmite){
+        if(this.state.firstSubmit){
             AlertUtils.showGeneralSuccessPopUp('are you sure you filled all the fields correctly?',true ,'I want to check again','question')
             .then((result) => {
                 if(result.value){
                 this.sendSellerInfoToAPI();  
                 }
                 if(result.dismiss){
-                    this.setState({firstSubmite:false})
+                    this.setState({firstSubmit:false})
                 }
             });
         }
@@ -68,7 +69,9 @@ class SellerForm extends Component{
         currentUserStore.currentUser.walletAddress = this.state.walletAddress;
         currentUserStore.currentUser.about = this.state.infoAboutUser;
         currentUserStore.currentUser.country = this.state.country;
-         
+        if(this.state.createNotification){
+            notificationStore.createNotification('New seller info','seller info', true, null);
+        }
         //send info to api db
         userFetcher.postSeller(currentUserStore.currentUser.userName, 
             "user",
@@ -98,6 +101,11 @@ class SellerForm extends Component{
             about: currentUserStore.currentUser.infoAboutUser,
             country : currentUserStore.currentUser.country
         });
+        if(currentUserStore.currentUser.address || currentUserStore.currentUser.role ==='admin' ){
+            this.setState({
+                createNotification:false
+            });
+        }
     }
     render(){
     const { value } = this.state;
@@ -174,7 +182,6 @@ class SellerForm extends Component{
                     style={{margin: "20px"}}     
                     defaultValue={currentUserStore.currentUser.country} 
                 />
-                {console.log(this.state.country)}
                 {this.renderOther()}
                 </Form.Group>
                 <Form.Field
