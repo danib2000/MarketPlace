@@ -74,7 +74,7 @@ class SellerForm extends Component{
         }
         //send info to api db
         userFetcher.postSeller(currentUserStore.currentUser.userName, 
-            "user",
+            "seller",
             this.state.address,
             this.state.city,
             this.state.region,

@@ -53,7 +53,7 @@ class NotificationDropDown extends Component{
             
         });
     }     
-    componentWillMount(){
+    componentDidMount(){
         if((currentUserStore.currentUser.notification > 0)){            
             this.notifications[0].text=<span>   
                 New Notifications: <strong>{currentUserStore.currentUser.notification}</strong>

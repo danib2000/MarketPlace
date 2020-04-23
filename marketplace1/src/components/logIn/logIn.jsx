@@ -9,6 +9,7 @@ import { observer } from 'mobx-react';
 import userFetcher from '../../fetchers/userFetcher';
 import ProfileDropDown from './profileDropdown.jsx';
 import AlertUtils from '../../AlertUtils';
+
 const authStore = rootStores[AUTH_STORE];
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 
@@ -26,7 +27,8 @@ constructor(props)
     initialTab: null,
     recoverPasswordSuccess: null,
     loggeduserName : null,
-    errorMessage: "" 
+    errorMessage: "",
+    userName:""
   }
 }
 
@@ -87,25 +89,55 @@ onRegister() {
   }
 }
 
-onRecoverPassword() {
+async onRecoverPassword() {
   console.log('__onFotgottenPassword__');
-  console.log('userName: ' + document.querySelector('#userName').value);
+  console.log('userName: ' + document.querySelector('#resetUser').value);
 
-  const userName = document.querySelector('#userName').value;
+  const userName = document.querySelector('#resetUser')
+  const code = document.querySelector('#code');
+  const pass = document.querySelector('#password');
 
-
-  if (!userName) {
-    this.setState({
-      error: true,
-      recoverPasswordSuccess: false,
-      errorMessage: "Please enter your Username"
-    })
-  } else {
-    this.setState({
-      error: null,
-      recoverPasswordSuccess: true
+  //send API call for code
+  if(userName.value){
+    this.startLoading();
+    await userFetcher.postResetMail(userName.value).then((res)=>{
+      this.setState({error:null, errorMessage:'', recoverPasswordSuccess: true, userName:userName.value});
+      userName.parentElement.className='hidden';
+      code.parentElement.className='RML-form-group';
+      userName.value='';
+      pass.parentElement.className='RML-form-group'
+    }).catch(err => {
+      this.setState({
+        error: true,
+        recoverPasswordSuccess: false,
+        errorMessage: "The username you entered does'nt exist"
+      });
     });
+    this.finishLoading();
   }
+
+  //check with api for validation and if valid reset the password
+  if(code.value && pass.value)  {
+    this.startLoading();
+    await userFetcher.postResetCodeAndPass(this.state.userName, code.value, pass.value).then( (res)=>{
+      this.setState({error:null, errorMessage:'', recoverPasswordSuccess: true,});
+      userName.parentElement.className='hidden';
+      code.parentElement.className='hidden';
+      pass.parentElement.className='hidden';
+      document.querySelector('#recoverPasswordSuccessLabel').innerHTML='Your password was reset, you can now login with your new password!';
+      code.value='';
+    }).catch(err =>{
+      this.setState({
+        error: true,
+        recoverPasswordSuccess: false,
+        errorMessage: "The code is inccorect!"
+      });
+    })
+    this.finishLoading();
+  }
+
+  console.log(this.state);
+
 }
 
 openModal(initialTab) {
@@ -188,16 +220,20 @@ render(){
         registerError={{
           label: this.state.errorMessage
         }}
+        recoverPasswordError={{
+          label:this.state.errorMessage
+        }}
         startLoading={() => {this.startLoading()}}
         finishLoading={() => {this.finishLoading()}}
         form={{
             onLogin: this.onLogin.bind(this),
             onRegister: this.onRegister.bind(this),
             onRecoverPassword: this.onRecoverPassword.bind(this),
-
+            
             recoverPasswordSuccessLabel: this.state.recoverPasswordSuccess
               ? {
-                  label: "New password has been sent to your mailbox!"
+                  label: "Please check your mailbox! a code was send to there",
+                  //input: "hasd"
                 }
               : null,
             recoverPasswordAnchor: {
@@ -210,7 +246,7 @@ render(){
               label: "Sign up"
             },
             recoverPasswordBtn: {
-              label: "Send new password"
+              label: "Next"
             },
             loginInputs: [
               {
@@ -263,14 +299,32 @@ render(){
             ],
             recoverPasswordInputs: [
               {
-                containerClass: 'RML-form-group',
+                containerClass: 'RML-form-group2',
                 label: 'Username',
-                type: 'userName',
+                type: 'restUser',
                 inputClass: 'RML-form-control',
-                id: 'userName',
-                name: 'userName',
-                placeholder: 'Username',
+                id: 'resetUser',
+                name: 'resetUser',
+                placeholder: 'username',
               },
+              {
+                containerClass: 'hidden',
+                type: 'code',
+                label: 'Secret Code',
+                inputClass: 'RML-form-control',
+                id: 'code',
+                name: 'code',
+                placeholder: 'Secret Code',
+              },
+              {
+                containerClass: 'hidden',
+                type: 'password',
+                label: 'Enter your new password here:',
+                inputClass: 'RML-form-control',
+                id: 'password',
+                name: 'password',
+                placeholder: 'New Password',
+              }
             ],
           }}
           separator={{

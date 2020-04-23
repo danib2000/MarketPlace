@@ -23,7 +23,7 @@ class Profile extends Component {
 
   addPane() {
     if (currentUserStore.currentUser.role === 'user'){
-        panes[2]={ menuItem: 'become a seller', render: () => <SellerForm/> };
+        panes[2]={ menuItem: 'seller information', render: () => <SellerForm/> };
     }else if(currentUserStore.currentUser.role === 'seller'){
       panes[2]={ menuItem: 'seller information', render: () => <SellerForm/>  };
     }

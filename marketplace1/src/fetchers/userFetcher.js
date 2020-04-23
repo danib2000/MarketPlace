@@ -37,5 +37,17 @@ class UserFetcher extends baseFetcher{
     static async postNotification(info, type, notifyAdmin, userToNotify){
         return await this.httpPost(this.routerBaseUrl + '/newNotification', {info:info, type:type, notifyAdmin:notifyAdmin, userToNotify:userToNotify});
     }
+    static async postResetMail(userName,){
+        return await this.httpPost(this.routerBaseUrl + '/sendResetMail', {userName:userName});
+    }
+    static async postResetCodeAndPass(userName, code, password){
+        return await this.httpPost(this.routerBaseUrl + '/validateCode', {userName:userName, code:code, password:password});
+    }
+    static async postNewEmail(newEmail){
+        return await this.httpPost(this.routerBaseUrl + '/update', {isEmail:true, newEmail:newEmail});
+    }
+    static async postNewPassword(oldPassword, newPassword){
+        return await this.httpPost(this.routerBaseUrl + '/update', {isPassword:true, oldPassword:oldPassword, newPassword:newPassword});
+    }
 }
 export default UserFetcher;

@@ -6,6 +6,7 @@ class MarketStore{
     @observable products =[];
     @observable account = "";
     @observable marketplace;
+    productCount;
 
     @action
     createp = (name , price) => {
@@ -34,17 +35,27 @@ class MarketStore{
             this.account = accounts[0]
             web3.eth.net.getId().then((networkId)=>{   
                 const networkData = MarketPlace.networks[networkId];
-        
+                
                 if(networkData) { //need to connect metamast to ganache on 127.0.0.1:7545
                     const marketPlace = web3.eth.Contract(MarketPlace.abi, networkData.address);
                     console.log(marketPlace);
                     this.marketplace = marketPlace;
+                    this.loadProducts();
                 }
             });
         });
         
         
         
+    }
+    @action 
+    async loadProducts(){
+        this.productCount = await this.marketplace.methods.productCount().call();
+        for(var i =0;i <=this.productCount; i++){
+            const product = await this.marketplace.methods.products(i).call();
+            this.products[i] = product;
+        }
+        console.log(this.products);
     }
 }
 
