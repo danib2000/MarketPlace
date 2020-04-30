@@ -12,6 +12,7 @@ import { observer } from 'mobx-react';
 
 
 const currentUserStore = rootStores[CURRENT_USER_STORE];
+const marketStore =rootStores[MARKET_STORE];
 @observer
 class App extends Component {
   constructor(props)
@@ -41,8 +42,10 @@ class App extends Component {
     //await this.loadBlockchainData()
     // store.loadWeb3();
     // store.loadBlockchainData();
-    rootStores[MARKET_STORE].loadWeb3();
-    rootStores[MARKET_STORE].loadBlockchainData();
+    marketStore.getEthPriceInUsd();
+    marketStore.loadWeb3();
+    marketStore.loadBlockchainData();
+    
     }
     catch{
       window.alert('Non-Ethereum browser detected, you wont be able to purchase items. You should consider trying MetaMask!')
@@ -64,7 +67,10 @@ class App extends Component {
           <Route exact path='/' component={Home} /> 
           {/* <Route path='/contact' component={Contact} /> */}
            <Route path='/about' component={About} />
-           <Route path='/profile' component={Profile}/>
+           {/* <Route path='/profile/notifications' component={Notifications}/> */}
+           <Route path='/profile/:id' component={Profile}/>
+           <Route path='/profile/' component={Profile}/>
+
       </Switch>
       </div>
   </Router>

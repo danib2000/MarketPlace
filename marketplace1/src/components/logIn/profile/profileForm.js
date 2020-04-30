@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Form, Input, TextArea, Button, Select } from 'semantic-ui-react'
+import { Form, Input,  } from 'semantic-ui-react'
 
-const options = [
-    { key: 'IL', text: 'Israel', value: 'Israel' },
-    { key: 'USA', text: 'United States', value: 'United States' },
-    { key: 'IN', text: 'India', value: 'India' },
-    {key:'RU', text:'Russia', value:'Russia'},
-    { key: 'o', text: 'Other', value: 'other' },
-  ]
+// const options = [
+//     { key: 'IL', text: 'Israel', value: 'Israel' },
+//     { key: 'USA', text: 'United States', value: 'United States' },
+//     { key: 'IN', text: 'India', value: 'India' },
+//     {key:'RU', text:'Russia', value:'Russia'},
+//     { key: 'o', text: 'Other', value: 'other' },
+//   ]
 
 class ProfileForm extends Component{
     

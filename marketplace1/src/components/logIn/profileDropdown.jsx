@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Dropdown, Icon } from 'semantic-ui-react'
-import {CURRENT_USER_STORE} from '../../stores/storeKeys';
+import {CURRENT_USER_STORE, MARKET_STORE} from '../../stores/storeKeys';
 import rootStores from '../../stores';
 import { withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import NotificationDropDown from './notificationDropdown';
 
 const currentUserStore = rootStores[CURRENT_USER_STORE];
+const marketStore = rootStores[MARKET_STORE];
 @observer
 class ProfileDropDown extends Component{
      profileOptions = [
@@ -20,7 +21,7 @@ class ProfileDropDown extends Component{
             disabled: true,
         },
         { key: 'profile', text: 'Your Profile', onClick: () => {this.props.history.push('/profile')}},
-        { key: 'upload a product', text: 'upload a product' },
+        { key: 'upload a product', text: 'upload a product', onClick: ()=>{this.props.history.push('/profile/uploadProduct')} },
         { key: 'help', text: 'Help' },
         { key: 'settings', text: 'Settings', onClick: () => {this.props.history.push('/settings')}},
         { key: 'sign-out', text: 'Sign Out', onClick:() => {this.signOut()} },
@@ -31,7 +32,8 @@ class ProfileDropDown extends Component{
       </span>
     )
     signOut(){
-      currentUserStore.logOut();      
+      currentUserStore.logOut();   
+      marketStore.cleanStore();
       this.props.history.replace('/');
     }
       render(){

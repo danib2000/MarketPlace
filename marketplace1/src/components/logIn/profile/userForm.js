@@ -5,7 +5,7 @@ import rootStores from '../../../stores';
 import userFetcher from '../../../fetchers/userFetcher';
 import AlertUtils from '../../../AlertUtils';
 import LocalStorage from '../../../localStorage/localStorageUtil';
-
+import ImageFetcher from '../../../fetchers/imgFetcher'
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 
 class UserForm extends Component{
@@ -19,7 +19,8 @@ class UserForm extends Component{
         mailloading:false,
         passworderror:false,
         passwordLoading:false,
-        oldPassDoesntMatch:false
+        oldPassDoesntMatch:false,
+        selectedFile: null
     };
     onSubmitMail = ()=>{
         if(this.state.email === this.state.confirmEmail){
@@ -38,7 +39,6 @@ class UserForm extends Component{
     onSubmitPassword = ()=>{
         if(this.state.newPassowrd === this.state.confirmPassword){
             this.setState({passwordLoading:true});
-            console.log('asd');
             userFetcher.postNewPassword(this.state.password, this.state.newPassowrd).then(res =>{
                 LocalStorage.writeToLocalStorage(res.data.token);
                 this.setState({passwordLoading:false});
@@ -50,6 +50,21 @@ class UserForm extends Component{
         }else{
             this.setState({passworderror:true});
         }
+    }
+    onUpload(){
+        console.log(this.state.selectedFile);
+        const data = new FormData()
+        data.append('file', this.state.selectedFile, 'ttt.jpg');
+        console.log(data);
+        ImageFetcher.postImage(data);
+    }
+    onChangeHandler=(event)=>{
+        console.log(event.target.files);
+        this.setState({
+            selectedFile:event.target.files[0]
+        }, () => {
+            console.log(this.state);
+        })
     }
     render(){
         return(
@@ -123,6 +138,7 @@ class UserForm extends Component{
                             />
                 </Form.Group>
                 <Form.Button>Submit</Form.Button>
+                
                 <div>
                     <Message
                         error
@@ -132,7 +148,13 @@ class UserForm extends Component{
                     />
                 </div>
             </Form>
-            
+            <Form onSubmit={this.onUpload.bind(this)}>
+                 <input type="file" name="file" onChange={this.onChangeHandler.bind(this)}/>
+
+                <Form.Button>Submit</Form.Button>
+
+            </Form>
+
             </div>
         );
     }

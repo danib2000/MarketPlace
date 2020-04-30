@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, TextArea, Button, Select } from 'semantic-ui-react'
+import { Form, Input} from 'semantic-ui-react'
 import {CURRENT_USER_STORE, NOTIFICATION_STORE} from '../../../stores/storeKeys';
 import rootStores from '../../../stores';
 import userFetcher from '../../../fetchers/userFetcher';
@@ -74,7 +74,7 @@ class SellerForm extends Component{
         }
         //send info to api db
         userFetcher.postSeller(currentUserStore.currentUser.userName, 
-            "seller",
+            "user",
             this.state.address,
             this.state.city,
             this.state.region,
@@ -101,14 +101,19 @@ class SellerForm extends Component{
             about: currentUserStore.currentUser.infoAboutUser,
             country : currentUserStore.currentUser.country
         });
-        if(currentUserStore.currentUser.address || currentUserStore.currentUser.role ==='admin' ){
+        if(currentUserStore.currentUser.address || currentUserStore.currentUser.role ==='admin'){
             this.setState({
                 createNotification:false
             });
         }
+        if(currentUserStore.currentUser.role ==='rejectedSeller'){
+            this.setState({
+                createNotification:true
+            });
+        }
     }
     render(){
-    const { value } = this.state;
+    // const { value } = this.state;
         return(
             <Form style={{margin: "10px"}}  onSubmit={this.handleSubmit} >
                 <Form.Group>

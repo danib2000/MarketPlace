@@ -49,5 +49,12 @@ class UserFetcher extends baseFetcher{
     static async postNewPassword(oldPassword, newPassword){
         return await this.httpPost(this.routerBaseUrl + '/update', {isPassword:true, oldPassword:oldPassword, newPassword:newPassword});
     }
+    static async updateNotification(id, newType, newMessge){
+        console.log(id);
+        return await this.httpPost(this.routerBaseUrl + '/update', {id:id, newType:newType, newMessge:newMessge, isNotification:true});
+    }
+    static async updateRole(userName, newRole){
+        return await this.httpPost(this.routerBaseUrl + '/update', {userName:userName, newRole:newRole, updateRole:true});
+    }
 }
 export default UserFetcher;

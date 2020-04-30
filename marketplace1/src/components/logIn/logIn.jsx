@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactModalLogin from "react-modal-login";
-import { facebookConfig, googleConfig } from "../../social-config";
+import {  googleConfig } from "../../social-config";
 import '../logIn/logIn.css'
 import { Button } from 'semantic-ui-react';
 import rootStores from '../../stores';
@@ -8,8 +8,7 @@ import {AUTH_STORE, CURRENT_USER_STORE} from '../../stores/storeKeys';
 import { observer } from 'mobx-react';
 import userFetcher from '../../fetchers/userFetcher';
 import ProfileDropDown from './profileDropdown.jsx';
-import AlertUtils from '../../AlertUtils';
-
+import ImgFetcher from './../../fetchers/imgFetcher'
 const authStore = rootStores[AUTH_STORE];
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 
@@ -141,7 +140,11 @@ async onRecoverPassword() {
 }
 
 openModal(initialTab) {
-
+  ImgFetcher.postImage('asd').then(res=>{
+    console.log(res);
+  }).catch(err=>{
+    console.log(err);
+  });
   this.setState({
     initialTab: initialTab
   }, () => {

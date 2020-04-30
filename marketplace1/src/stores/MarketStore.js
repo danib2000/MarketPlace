@@ -1,17 +1,20 @@
 import {observable, action} from 'mobx';
 import Web3 from 'web3';
 import MarketPlace from '../abis/MarketPlace.json'
+import rootStore from './';
+import {CURRENT_USER_STORE} from './storeKeys';
+import axios from 'axios';
 
 class MarketStore{
     @observable products =[];
     @observable account = "";
     @observable marketplace;
+    @observable usdPrice;
     productCount;
 
     @action
     createp = (name , price) => {
-        // this.loadWeb3();
-        // this.loadBlockchainData();
+        this.account = rootStore[CURRENT_USER_STORE].currentUserStore.currentUser.walletAddress;
         this.marketplace.methods.createProducts(name, price).send({from:this.account})
         .once('receipt', (receipt)=> {
         console.log(receipt);
@@ -49,6 +52,10 @@ class MarketStore{
         
     }
     @action 
+    async getEthPriceInUsd(){
+        this.usdPrice = await (await axios.get('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC,USD')).data.USD;
+    }
+    @action 
     async loadProducts(){
         this.productCount = await this.marketplace.methods.productCount().call();
         for(var i =0;i <=this.productCount; i++){
@@ -57,8 +64,13 @@ class MarketStore{
         }
         console.log(this.products);
     }
+    @action
+    cleanStore(){
+        this.products =[];
+        this.account = ""; 
+    }
 }
-
+    
 //var store = window.stores = new MarketStore;
 
 export default MarketStore;

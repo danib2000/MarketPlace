@@ -33,7 +33,9 @@ class CurrentUserStore{
         newUser.notification = authData.notification;
         this.currentUser = newUser;
         if(this.currentUser.notification>0){
-          await this.notificationStore.getAllNotifications();
+          await this.notificationStore.getAllNotifications().then(()=>{
+            console.log('done');
+          });
         }
     }
     @action 
@@ -56,6 +58,11 @@ class CurrentUserStore{
       LocalStorage.clearTokenFromLocalStorage();
       this.errorMessage = null;
       this.currentUser = null;
+      this.notificationStore.cleanStore();
+    }
+    @action
+    updateUserRole(userName, newRole){
+      UserFetcher.updateRole(userName, newRole);
     }
 }
 export default CurrentUserStore;

@@ -7,8 +7,10 @@ import { observer } from 'mobx-react';
 
 const currentUserStore = rootStores[CURRENT_USER_STORE];
 const notificationStore = rootStores[NOTIFICATION_STORE];
+
 @observer
 class NotificationDropDown extends Component{
+    state={}
     notifications = [
         {
             key: 'amount',
@@ -37,34 +39,47 @@ class NotificationDropDown extends Component{
         </span>
     )
     pushNotifications(){
-        console.log(notificationStore);
-        console.log( notificationStore.notifications[0]);
+        this.sleep(500).then(() => {
         notificationStore.notifications.forEach(notification => {
-            console.log(notification);
-            console.log('asd');
+            if(notification.isNewNotification === true){
             if(notification.type ==='seller info')
             {
-                console.log('asd');
                 this.notifications.push({
-                    key: notification.type,
-                    text: notification.info + ' - by the user: ' + notification.sellerInfo.userName
+                    key: notification.type + this.state.i ,
+                    text: notification.info + ' - by the user: ' + notification.sellerInfo.userName,
+                    onClick: () => {this.props.history.push('/profile/notifications')}
                 });
+                this.setState({i:this.state.i+1});
+            }else{
+                this.notifications.push({
+                    key: notification.type + this.state.i ,
+                    text: notification.info,
+                    onClick: () => {this.props.history.push('/profile/notifications')}
+                });
+                this.setState({i:this.state.i+1});
             }
-            
-        });
-    }     
-    componentDidMount(){
-        if((currentUserStore.currentUser.notification > 0)){            
-            this.notifications[0].text=<span>   
-                New Notifications: <strong>{currentUserStore.currentUser.notification}</strong>
-                </span>;
-            this.pushNotifications();
-        }else{
-            this.notifications[0].text=<span>
-            No New Notifications
-          </span>
-          
         }
+        });
+    });
+    }   
+    sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }  
+    componentDidMount(){
+        this.setState({i: 0});
+            if((currentUserStore.currentUser.notification > 0)){            
+                this.notifications[0].text=<span>   
+                    New Notifications: <strong>{currentUserStore.currentUser.notification}</strong>
+                    </span>;
+                this.pushNotifications();
+            }else{
+                this.notifications[0].text=<span>
+                No New Notifications
+              </span>
+              
+            }
+        
+        
     }   
     render(){
             

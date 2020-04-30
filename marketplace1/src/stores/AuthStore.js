@@ -14,7 +14,9 @@ class AuthStore{
         await UserFetcher.authenticationLogIn(userName, password).then( (res) => {
             if(res.data.token !== null){
                 LocalStorage.writeToLocalStorage(res.data.token).then( async () =>{
-                    await this.currentUserStore.initUserFromAPI();
+                    await this.currentUserStore.initUserFromAPI().then(()=>{
+                        console.log('done2');
+                    });
                 });
             }else{
                 throw new Error();
