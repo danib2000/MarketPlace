@@ -13,50 +13,36 @@ class ProductUpload extends Component{
     state = {
         name:"",
         description:"",
-        password:"",
         priceInEth:0,
         priceInUSD:0,
+        stock:0,
         formDisabled:false,
         loading:false,
         selectedFile: null
     };
-    onSubmitMail = ()=>{
-        if(this.state.email === this.state.confirmEmail){
-            this.setState({mailloading:true});
-            userFetcher.postNewEmail(this.state.email).then((res)=>{
-                LocalStorage.writeToLocalStorage(res.data.token);
-                this.setState({mailloading:false});
-            }).catch(err =>{
-                console.log(err);
-                this.setState({mailloading:false});
-            })
-        }else{
-            this.setState({mailerror:true});
-        }
-    }
-    onSubmitPassword = ()=>{
-        if(this.state.newPassowrd === this.state.confirmPassword){
-            this.setState({passwordLoading:true});
-            userFetcher.postNewPassword(this.state.password, this.state.newPassowrd).then(res =>{
-                LocalStorage.writeToLocalStorage(res.data.token);
-                this.setState({passwordLoading:false});
-            }).catch(err=>{
-                this.setState({passwordLoading:false});
-                this.setState({oldPassDoesntMatch: !this.state.oldPassDoesntMatch});
-                console.log(err);
-            })
-        }else{
-            this.setState({passworderror:true});
-        }
-    }
-    onUpload(){
-        console.log(this.state.selectedFile);
+    onSubmitProduct = ()=>{
+        //uploads img to api
+        this.setState({loading:true});
         const data = new FormData()
-        data.append('file', this.state.selectedFile, 'ttt.jpg');
+        data.append('file', this.state.selectedFile, this.state.name);
         ImageFetcher.postImage(data);
+        const path = this.state.name + '.' +this.state.selectedFile.type.split('/')[1];
+        //uploads product to db
+        marketStore.createProduct(this.state.name,this.state.description,this.state.priceInUSD,this.state.priceInEth, path, this.state.stock)
+        .then(()=>{
+            console.log('uploaded');
+            this.setState({loading:false});
+            //TODO fire alert
+        });
+    }
+
+    onUpload(){
+        console.log(this.state.selectedFile.type.split('/')[1]);
+        const data = new FormData()
+        data.append('file', this.state.selectedFile, this.state.name);
+       // ImageFetcher.postImage(data);
     }
     onChangeHandler=(event)=>{
-        console.log(event.target.files);
         this.setState({
             selectedFile:event.target.files[0]
         }, () => {
@@ -65,8 +51,7 @@ class ProductUpload extends Component{
     }
     componentDidMount(){
         if(currentUserStore.currentUser.role !== 'seller' || currentUserStore.currentUser.role !== 'admin' ){
-            //fire alert
-            console.log('asd');
+            //TODO fire alert
             this.setState({formDisabled:true});
         }
     }
@@ -74,7 +59,7 @@ class ProductUpload extends Component{
         return(
             <div className='Forms' style={{margin: "10px"}}>
                 <Header size='medium'>Product Details</Header>
-            <Form onSubmit={this.onSubmitMail} loading={this.state.loading} disabled={this.state.formDisabled}>
+            <Form onSubmit={this.onSubmitProduct} loading={this.state.loading} disabled={this.state.formDisabled}>
                     <Form.Field required 
                                 width={4}
                                 id='form-input-control-name'
@@ -91,18 +76,19 @@ class ProductUpload extends Component{
                             />
                 <Form.Group>
                     <Form.Field required 
-                                    width={2}
+                                    width={3}
                                     id='form-input-control-priceEth'
                                     control={Input}
                                     label='Price in ETH'
                                     type='number'
+                                    step='0.1'
                                     value={this.state.priceInEth}
                                     placeholder='Ξ'
                                     onChange={(e)=> {this.setState({priceInEth: e.target.value, 
                                                     priceInUSD: e.target.value * marketStore.usdPrice})}}
                                 /> 
                     <Form.Field required 
-                                    width={2}
+                                    width={3}
                                     id='form-input-control-priceUSD'
                                     control={Input}
                                     type='number'
@@ -112,15 +98,19 @@ class ProductUpload extends Component{
                                     onChange={(e)=> {this.setState({priceInUSD: e.target.value,
                                                         priceInEth:e.target.value / marketStore.usdPrice})}}
                                 />
+                    <Form.Field required 
+                                    width={3}
+                                    id='form-input-control-stock'
+                                    control={Input}
+                                    type='number'
+                                    value={this.state.stock}
+                                    label='Stock'
+                                    onChange={(e)=> {this.setState({stock: e.target.value})}}
+                                />
                 </Form.Group>
-            <Form.Button disabled={this.state.formDisabled}>Submit</Form.Button>
+                <input type="file" name="file" onChange={this.onChangeHandler.bind(this)}/>
+            <Form.Button disabled={!this.state.formDisabled}>Submit</Form.Button>
             </Form>            
-            <Form onSubmit={this.onUpload.bind(this)}>
-                 <input type="file" name="file" onChange={this.onChangeHandler.bind(this)}/>
-                <Form.Button>Submit</Form.Button>
-
-            </Form>
-
             </div>
         );
     }

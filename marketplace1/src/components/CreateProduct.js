@@ -1,8 +1,49 @@
 import React, { Component } from 'react';
-import store from '../stores/MarketStore';
-
+import rootStore from '../stores';
+import {MARKET_STORE} from '../stores/storeKeys';
+import { Grid, Image, Card, Button } from 'semantic-ui-react'
+import Product from '../modules/Product'
+const marketStore = rootStore[MARKET_STORE];
 class CreateProduct extends Component {
-   
+    state = {
+      columns:3,
+      products:[]
+  };
+
+  componentDidMount(){
+    //get amount of products
+    
+  }
+  buyProduct(product){
+    console.log(product);
+    marketStore.purchaseProduct();
+  }
+  loadCard(product){
+    return <Card style={{width:'400px'}} >
+            <Image src={product.path} wrapped ui={false} className='card-image'/>
+            <Card.Content>
+              <Card.Header
+              textAlign='center'>{product.name}</Card.Header>
+              <Card.Description textAlign='center'>
+                {product.descripton}
+              </Card.Description>
+              <Card.Content className='lower-content' >
+                priceETH:{product.priceEth}Ξ
+                <span> priceUSD:{product.priceUSD}$</span>
+              </Card.Content>
+              <Button onClick={this.buyProduct.bind(this, product)}>
+                Buy Now
+              </Button>
+            </Card.Content>
+            
+          </Card>
+  }
+  loadGrid(){
+    for(var i = 0;i<this.state.products.length;i++){
+
+    }
+  }
+  product = new Product('iphone','Smart phone from apple','1.5','650','http://localhost:3001/iphone.jpeg');
   render() {
     return (
             <div id="content" style={{marginTop :"40px"}}>
@@ -11,7 +52,8 @@ class CreateProduct extends Component {
                 event.preventDefault()
                 const name = this.productName.value
                 const price = window.web3.utils.toWei(this.productPrice.value.toString(), 'Ether')
-                store.createp(name, price)
+                //marketStore.createProduct(name, price);
+                marketStore.createProduct(name, price);
               }}>
                 <div className="form-group mr-sm-2">
                   <input
@@ -34,41 +76,31 @@ class CreateProduct extends Component {
                 <button type="submit" className="btn btn-primary">Add Product</button>
               </form>
               <p>&nbsp;</p>
-              <h2>Buy Product</h2>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Owner</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody id="productList">
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>iPhone x</td>
-                    <td>1 Eth</td>
-                    <td>0x39C7BC5496f4eaaa1fF75d88E079C22f0519E7b9</td>
-                    <td><button className="buyButton">Buy</button></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Macbook Pro</td>
-                    <td>3 eth</td>
-                    <td>0x39C7BC5496f4eaaa1fF75d88E079C22f0519E7b9</td>
-                    <td><button className="buyButton">Buy</button></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Airpods</td>
-                    <td>0.5 eth</td>
-                    <td>0x39C7BC5496f4eaaa1fF75d88E079C22f0519E7b9</td>
-                    <td><button className="buyButton">Buy</button></td>
-                  </tr>
-                </tbody>
-              </table>
+              <Grid columns={this.state.columns} divided centered>
+                <Grid.Row  centered>
+                  <Grid.Column  centered>
+                    {this.loadCard(this.product)}
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
+                  </Grid.Column>
+                </Grid.Row>
+
+                <Grid.Row>
+                  <Grid.Column>
+                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
             </div>
     );
   }

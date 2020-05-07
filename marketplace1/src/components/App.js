@@ -56,7 +56,7 @@ class App extends Component {
  
   render() {
     if(this.state.loading){
-      return(<div></div>)
+      return(<div>loading......</div>)
     }else 
     {
     return(
