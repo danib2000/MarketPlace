@@ -1,25 +1,26 @@
 
 class Product{
     name;
-    descripton;
+    description;
     priceEth;
     priceUSD;
-    path;
-    id;
-    purchased;
-    owner;
-    price;
-
-    constructor(name, descripton, priceEth ,priceUSD , path, id, purchased, owner, price){
+    imgPath;
+    ownerId;
+    blockChainId;
+    blockChainPrice;
+    blockChainStock;
+    dbId;
+    constructor(name, description, priceEth ,priceUSD , path, ownerId, blockChainId, blockChainPrice, blockChainStock,dbId){
         this.name = name;
-        this.descripton = descripton
-        this.priceEth = priceEth
-        this.priceUSD = priceUSD
-        this.path = path
-        this.id = id;
-        this.purchased = purchased;
-        this.owner = owner;
-        this.price = price;
+        this.description = description;
+        this.priceEth = priceEth;
+        this.priceUSD = priceUSD;
+        this.imgPath = path;
+        this.ownerId = ownerId;
+        this.blockChainId = blockChainId;
+        this.blockChainPrice = blockChainPrice;
+        this.blockChainStock = blockChainStock;
+        this.dbId = dbId;
     }
 }
 export default Product;

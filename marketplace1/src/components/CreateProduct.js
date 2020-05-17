@@ -1,51 +1,88 @@
 import React, { Component } from 'react';
 import rootStore from '../stores';
-import {MARKET_STORE} from '../stores/storeKeys';
-import { Grid, Image, Card, Button } from 'semantic-ui-react'
+import {MARKET_STORE, CURRENT_USER_STORE} from '../stores/storeKeys';
+import { Grid, Image, Card, Button, Input, Label } from 'semantic-ui-react'
 import Product from '../modules/Product'
+import { observer } from 'mobx-react';
 const marketStore = rootStore[MARKET_STORE];
+const currentUserStore = rootStore[CURRENT_USER_STORE];
+@observer
 class CreateProduct extends Component {
     state = {
       columns:3,
-      products:[]
+      productCount:0,
+      loading:true,
+      productError:[]
   };
 
   componentDidMount(){
-    //get amount of products
-    
+    this.setState({loading:false});
   }
   buyProduct(product){
+    if(product.quantity && currentUserStore.isUserLoggedIn){
+      marketStore.purchaseProduct(product);
+    }else{
+      const list = [...this.state.productError];
+      list[product.blockChainId]=true;
+      this.setState({productError:list});
+    }
     console.log(product);
-    marketStore.purchaseProduct();
+
+    //marketStore.productsDB.push(this.product);
+    //marketStore.purchaseProduct();
   }
   loadCard(product){
     return <Card style={{width:'400px'}} >
-            <Image src={product.path} wrapped ui={false} className='card-image'/>
+            <Image src={"http://localhost:3001/" + product.imgPath} style={{width: '390px', height: '300px'}}  ui={false} className='card-image'/>
             <Card.Content>
               <Card.Header
               textAlign='center'>{product.name}</Card.Header>
               <Card.Description textAlign='center'>
-                {product.descripton}
+                {product.description}
               </Card.Description>
               <Card.Content className='lower-content' >
-                priceETH:{product.priceEth}Ξ
-                <span> priceUSD:{product.priceUSD}$</span>
+                priceETH:{product.priceEth}Ξ<br/>
+                <span> priceUSD:{product.priceUSD}$</span><br/>
+                Available Stock:{product.blockChainStock}
               </Card.Content>
-              <Button onClick={this.buyProduct.bind(this, product)}>
-                Buy Now
-              </Button>
+              {product.blockChainStock >0 ?
+                  <div>
+                    <Input error={this.state.productError[product.blockChainId]} label={{ basic: true, content: 'quantity' }}  type='number' min='1' max={product.blockChainStock} onChange={(e)=>{product.quantity = e.target.value}}/>
+                    <Button style={{right: 0,position: 'absolute'}}onClick={this.buyProduct.bind(this, product)}>Buy Now</Button>
+                  </div>:
+                  <div>
+                    <br/>
+                    <Label color='red' attached='bottom'>Item is out of Stock</Label>
+                  </div>}
             </Card.Content>
-            
           </Card>
   }
   loadGrid(){
-    for(var i = 0;i<this.state.products.length;i++){
-
+    var result = [];
+    console.log(marketStore.productsBlockChain);
+    var amount = marketStore.productsDB.length;
+    for(var i = 0;i<amount;i=i+3){
+      result.push(<Grid.Row key={i} centered>
+                    <Grid.Column >
+                      {marketStore.productsDB[i] ? this.loadCard(marketStore.productsDB[i]):null}
+                    </Grid.Column>
+                    <Grid.Column>
+                    {marketStore.productsDB[i+1] ? this.loadCard(marketStore.productsDB[i+1]):null}
+                    </Grid.Column>
+                    <Grid.Column>
+                    {marketStore.productsDB[i+2] ? this.loadCard(marketStore.productsDB[i+2]):null}
+                    </Grid.Column>
+                  </Grid.Row>);
     }
+    return result;
   }
-  product = new Product('iphone','Smart phone from apple','1.5','650','http://localhost:3001/iphone.jpeg');
+  product = new Product('iphone','Smart phone from apple','1.5','650','iphone.jpeg');
   render() {
-    return (
+    if(this.state.loading){
+      return(<div>loading......</div>)
+    }else 
+    {
+    return (      
             <div id="content" style={{marginTop :"40px"}}>
         <h1>Add Product</h1>
               <form onSubmit={(event) => {
@@ -77,33 +114,12 @@ class CreateProduct extends Component {
               </form>
               <p>&nbsp;</p>
               <Grid columns={this.state.columns} divided centered>
-                <Grid.Row  centered>
-                  <Grid.Column  centered>
-                    {this.loadCard(this.product)}
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
-                  </Grid.Column>
-                </Grid.Row>
-
-                <Grid.Row>
-                  <Grid.Column>
-                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Image src='https://react.semantic-ui.com/images/wireframe/media-paragraph.png' />
-                  </Grid.Column>
-                </Grid.Row>
+                {this.loadGrid()}
               </Grid>
             </div>
     );
   }
+}
 }
 
 export default CreateProduct;

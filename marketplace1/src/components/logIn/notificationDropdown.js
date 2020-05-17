@@ -46,14 +46,14 @@ class NotificationDropDown extends Component{
             {
                 this.notifications.push({
                     key: notification.type + this.state.i ,
-                    text: notification.info + ' - by the user: ' + notification.sellerInfo.userName,
+                    text: notification.type + ' - by the user: ' + notification.sellerInfo.userName,
                     onClick: () => {this.props.history.push('/profile/notifications')}
                 });
                 this.setState({i:this.state.i+1});
             }else{
                 this.notifications.push({
                     key: notification.type + this.state.i ,
-                    text: notification.info,
+                    text: notification.type,
                     onClick: () => {this.props.history.push('/profile/notifications')}
                 });
                 this.setState({i:this.state.i+1});

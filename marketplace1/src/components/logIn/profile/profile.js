@@ -8,6 +8,7 @@ import SellerForm from './sellerForm';
 import ProfileForm from './profileForm';
 import Notifications from './Notifications'
 import ProductUpload from './productUpload';
+import MyProducts from './myProducts';
 import { withRouter} from 'react-router-dom';
 
 
@@ -20,6 +21,7 @@ const panes = [
   { menuItem: 'seller information', render: () => <SellerForm/> },
   { menuItem: 'notifications', render: () => <Notifications/> },
   { menuItem: 'Upload Product', render: () => <ProductUpload/> },
+  { menuItem: 'My Products', render: () => <MyProducts/> },
 ]
 @observer
 class Profile extends Component {
@@ -42,6 +44,9 @@ class Profile extends Component {
     }
     if(this.props.match.params.id === 'uploadProduct'){
       this.setState({ activeIndex:4 });
+    }
+    if(this.props.match.params.id === 'myProducts'){
+      this.setState({ activeIndex:5 });
     }
   }
   render() {

@@ -22,7 +22,7 @@ class ProfileDropDown extends Component{
         },
         { key: 'profile', text: 'Your Profile', onClick: () => {this.props.history.push('/profile')}},
         { key: 'upload a product', text: 'upload a product', onClick: ()=>{this.props.history.push('/profile/uploadProduct')} },
-        { key: 'help', text: 'Help' },
+        { key: 'my products', text: 'my products', onClick: ()=>{this.props.history.push('/profile/myProducts')} },
         { key: 'settings', text: 'Settings', onClick: () => {this.props.history.push('/settings')}},
         { key: 'sign-out', text: 'Sign Out', onClick:() => {this.signOut()} },
     ];

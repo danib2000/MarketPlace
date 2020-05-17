@@ -13,7 +13,6 @@ contract MarketPlace2 {
         uint stock;
         address payable owner;
     }
-
     event ProductCreated(
         uint id,
         string name,
@@ -21,7 +20,6 @@ contract MarketPlace2 {
         uint stock,
         address payable owner
     );
-    
     event ProductPurchased(
         uint id,
         string name,
@@ -52,9 +50,7 @@ contract MarketPlace2 {
         products[productCount] = Product(productCount, _name, _price, _stock, msg.sender);
         //trigger an event
         emit ProductCreated(productCount, _name, _price, _stock, msg.sender);
-
     } 
-
     function updateProduct(uint id, string memory newName, uint newPrice, uint newStock) public{
         //make sure parameters are correct
          // Require a valid name
@@ -70,11 +66,10 @@ contract MarketPlace2 {
         product.stock = newStock;
         products[id] = product;
         // Trigger an event
-        emit ProductUpated(productCount, newName, newPrice, newStock);
+        emit ProductUpated(id, newName, newPrice, newStock);
 
     }
-
-    function purchaseProduct(uint id, uint amount) public payable {
+    function purchaseProduct(uint id, uint _amount) public payable {
         // Fetch the product
         Product memory product = products[id];
         // Fetch the owner
@@ -82,17 +77,17 @@ contract MarketPlace2 {
         // Make sure the product has a valid id
         require(product.id > 0 && product.id <= productCount); 
         // Require that there is enough Ether in the transaction
-        require(msg.value * amount >= product.price);
+        require(msg.value * _amount >= product.price);
         // Require that the buyer is not the seller
         require(msg.sender != seller);
-        require(amount <= product.stock);
-        product.stock --;
+        require(_amount <= product.stock);
+        product.stock -= _amount;
         // Update the product
         products[id] = product;
         // Pay the seller by sending them Ether
         address(seller).transfer(msg.value);
         // Trigger an event
-        emit ProductPurchased(productCount, product.name, product.price, product.stock, msg.sender);
+        emit ProductPurchased(id, product.name, product.price, product.stock, msg.sender);
 
     }
 }

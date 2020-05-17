@@ -270,7 +270,7 @@ render(){
               {
                 containerClass: 'RML-form-group',
                 label: 'Email *',
-                type: 'text',
+                type: 'email',
                 inputClass: 'RML-form-control',
                 id: 'login',
                 name: 'login',

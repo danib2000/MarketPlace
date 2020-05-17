@@ -82,6 +82,7 @@ class ProductUpload extends Component{
                                     label='Price in ETH'
                                     type='number'
                                     step='0.1'
+                                    min = '0'
                                     value={this.state.priceInEth}
                                     placeholder='Ξ'
                                     onChange={(e)=> {this.setState({priceInEth: e.target.value, 
@@ -92,6 +93,8 @@ class ProductUpload extends Component{
                                     id='form-input-control-priceUSD'
                                     control={Input}
                                     type='number'
+                                    min = '0'
+                                    step="any"
                                     value={this.state.priceInUSD}
                                     label='Price in USD'
                                     placeholder='$'
@@ -103,6 +106,8 @@ class ProductUpload extends Component{
                                     id='form-input-control-stock'
                                     control={Input}
                                     type='number'
+                                    min = '0'
+                                    step="any"
                                     value={this.state.stock}
                                     label='Stock'
                                     onChange={(e)=> {this.setState({stock: e.target.value})}}
